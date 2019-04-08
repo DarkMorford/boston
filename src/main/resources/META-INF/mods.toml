@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+[[mods]]
+modId="boston"
+version="${file.jarVersion}"
+displayName="Boston"
+description='''
+Adds a tracking webpage to a forge server at 0.0.0.0:9292.
+'''
+[[dependencies.boston]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="BOTH"
