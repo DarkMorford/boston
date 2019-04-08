@@ -1,6 +1,8 @@
 package com.loadingreadyrun.boston;
 
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,20 +11,20 @@ public class PlayerBean {
     private Map<String, Integer> blocksBroken;
     private Map<String, Integer> itemsBuilt;
 
-    private BlockPos playerPosion;
+    private Triple<Integer, Integer, Integer> playerPosition;
 
     PlayerBean() {
         blocksBroken = new HashMap<>();
         itemsBuilt = new HashMap<>();
-        playerPosion = new BlockPos(0,0,0);
+        playerPosition = new ImmutableTriple<>(0,0,0);
     }
 
-    public BlockPos getPlayerPosion() {
-        return playerPosion;
+    public Triple<Integer, Integer, Integer> getPlayerPosition() {
+        return playerPosition;
     }
 
-    public void setPlayerPosion(BlockPos playerPosion) {
-        this.playerPosion = playerPosion;
+    public void setPlayerPosition(BlockPos playerPosition) {
+        this.playerPosition = new ImmutableTriple<>(playerPosition.getX(), playerPosition.getY(), playerPosition.getZ());
     }
 
     public Map<String, Integer> getBlocksBroken() {

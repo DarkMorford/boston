@@ -55,7 +55,7 @@ public class WebServer extends NanoHTTPD {
 
     public void setPlayerPosition(String name, BlockPos playerPosition) {
         PlayerBean player = this.players.getOrDefault(name, new PlayerBean());
-        player.setPlayerPosion(playerPosition);
+        player.setPlayerPosition(playerPosition);
 
         this.players.put(name, player);
     }

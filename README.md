@@ -12,17 +12,13 @@ Returns the position of each player connected, the blocks they have broken and t
 {
   "Test": {
     "blocksBroken": {
-      "Spruce Leaves": 1,
-      "Spruce Log": 3
+      "Grass Block": 3
     },
-    "itemsBuilt": {
-      "Chest": 2,
-      "Spruce Planks": 12
-    },
-    "playerPosion": {
-      "x": -48,
-      "y": 72,
-      "z": -9
+    "itemsBuilt": {},
+    "playerPosition": {
+      "left": -48, // X
+      "middle": 72, // Y
+      "right": -9 // Z
     }
   }
 }
