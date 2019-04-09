@@ -45,7 +45,7 @@ public class BostonMod {
             return;
 
         String playerName = event.getPlayer().getName().getString();
-        String blockName = event.getState().getBlock().asItem().getName().getString();
+        String blockName = event.getState().getBlock().getRegistryName().toString();
 
         webServer.countBlockBroken(playerName, blockName);
     }
@@ -53,7 +53,7 @@ public class BostonMod {
     @SubscribeEvent
     public void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
         String playerName = event.getPlayer().getName().getString();
-        String itemName = event.getCrafting().getItem().getName().getString();
+        String itemName = event.getCrafting().getItem().getRegistryName().toString();
         int itemCount = event.getCrafting().getCount();
 
         webServer.countItemCrafted(playerName, itemName, itemCount);

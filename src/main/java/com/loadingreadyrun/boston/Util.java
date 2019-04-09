@@ -25,7 +25,7 @@ public class Util {
                     BlockPos pos = new BlockPos(blockX, blockY, blockZ);
                     IBlockState block = chunk.getBlockState(pos);
 
-                    String blockName = block.getBlock().asItem().getName().getString();
+                    String blockName = block.getBlock().asItem().getRegistryName().toString();
 
                     Integer currentValue = comp.getOrDefault(blockName, 0);
 
