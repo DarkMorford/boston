@@ -22,12 +22,13 @@ public class BostonMod {
 
     public BostonMod() {
         MinecraftForge.EVENT_BUS.register(this);
-        webServer = new WebServer();
     }
 
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         LOGGER.info("STARTING stats server on localhost:9292");
+
+        webServer = new WebServer(event.getServer());
 
         try {
             webServer.start();
@@ -39,6 +40,9 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
+        if(webServer == null)
+            return;
+        
         IWorld world = event.getWorld();
 
         if (world.isRemote())
@@ -52,6 +56,9 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+        if(webServer == null)
+            return;
+
         String playerName = event.getPlayer().getName().getString();
         String itemName = event.getCrafting().getItem().getRegistryName().toString();
         int itemCount = event.getCrafting().getCount();
@@ -61,6 +68,9 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(webServer == null)
+            return;
+
         String playerName = event.player.getName().getString();
         BlockPos pos = event.player.getPosition();
 

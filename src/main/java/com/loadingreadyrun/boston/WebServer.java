@@ -2,9 +2,10 @@ package com.loadingreadyrun.boston;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.iki.elonen.NanoHTTPD;
-import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.dimension.DimensionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,11 +17,13 @@ import java.util.Map;
 public class WebServer extends NanoHTTPD {
     private static final Logger LOGGER = LogManager.getLogger();
     private Map<String, PlayerBean> players;
+    private MinecraftServer minecraftServer;
 
-    public WebServer() {
+    public WebServer(MinecraftServer mc) {
         super("0.0.0.0", 9292);
 
         players = new HashMap<>();
+        minecraftServer = mc;
     }
 
     @Override
@@ -35,7 +38,8 @@ public class WebServer extends NanoHTTPD {
             String output;
 
             if (chunkX != null) {
-                IChunk chunk = Minecraft.getInstance().world.getChunk(
+
+                IChunk chunk = minecraftServer.getWorld(DimensionType.OVERWORLD).getChunk(
                         Integer.valueOf(chunkX.get(0)),
                         Integer.valueOf(chunkZ.get(0))
                 );
