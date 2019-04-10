@@ -64,9 +64,9 @@ public class WebServer extends NanoHTTPD {
         this.players.put(name, player);
     }
 
-    public void countBlockBroken(String playerName, String blockName) {
+    public void countObjectBroken(String playerName, String blockName) {
         PlayerBean player = this.players.getOrDefault(playerName, new PlayerBean());
-        player.countBlockBroken(blockName);
+        player.countObjectBroken(blockName);
 
         this.players.put(playerName, player);
     }
@@ -77,4 +77,5 @@ public class WebServer extends NanoHTTPD {
 
         this.players.put(playerName, player);
     }
+
 }

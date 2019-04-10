@@ -11,14 +11,16 @@ Returns the position of each player connected, the blocks they have broken and t
 ```js
 {
   "Test": {
-    "blocksBroken": {
-      "Grass Block": 3
+    "objectsBroken": {
+      "minecraft:dirt": 21,
+      "minecraft:grass_block": 40,
+      "minecraft:wooden_shovel": 1
     },
     "itemsBuilt": {},
     "playerPosition": {
-      "left": -48, // X
-      "middle": 72, // Y
-      "right": -9 // Z
+      "left": -43,
+      "middle": 74,
+      "right": 3
     }
   }
 }

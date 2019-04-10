@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerBean {
-    private Map<String, Integer> blocksBroken;
+    private Map<String, Integer> objectsBroken;
     private Map<String, Integer> itemsBuilt;
 
     private Triple<Integer, Integer, Integer> playerPosition;
 
     PlayerBean() {
-        blocksBroken = new HashMap<>();
+        objectsBroken = new HashMap<>();
         itemsBuilt = new HashMap<>();
         playerPosition = new ImmutableTriple<>(0,0,0);
     }
@@ -27,13 +27,13 @@ public class PlayerBean {
         this.playerPosition = new ImmutableTriple<>(playerPosition.getX(), playerPosition.getY(), playerPosition.getZ());
     }
 
-    public Map<String, Integer> getBlocksBroken() {
-        return blocksBroken;
+    public Map<String, Integer> getObjectsBroken() {
+        return objectsBroken;
     }
 
-    public void countBlockBroken(String name) {
-       Integer currentCount = this.blocksBroken.getOrDefault(name, 0);
-       this.blocksBroken.put(name, currentCount + 1);
+    public void countObjectBroken(String name) {
+       Integer currentCount = this.objectsBroken.getOrDefault(name, 0);
+       this.objectsBroken.put(name, currentCount + 1);
     }
 
     public Map<String, Integer> getItemsBuilt() {

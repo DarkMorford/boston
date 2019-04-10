@@ -3,6 +3,7 @@ package com.loadingreadyrun.boston;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -42,7 +43,7 @@ public class BostonMod {
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         if(webServer == null)
             return;
-        
+
         IWorld world = event.getWorld();
 
         if (world.isRemote())
@@ -51,7 +52,7 @@ public class BostonMod {
         String playerName = event.getPlayer().getName().getString();
         String blockName = event.getState().getBlock().getRegistryName().toString();
 
-        webServer.countBlockBroken(playerName, blockName);
+        webServer.countObjectBroken(playerName, blockName);
     }
 
     @SubscribeEvent
@@ -75,5 +76,16 @@ public class BostonMod {
         BlockPos pos = event.player.getPosition();
 
         webServer.setPlayerPosition(playerName, pos);
+    }
+
+    @SubscribeEvent
+    public void onPlayerItemBreak(PlayerDestroyItemEvent event) {
+        if(webServer == null)
+            return;
+
+        String playerName = event.getEntityPlayer().getName().getString();
+        String itemName = event.getOriginal().getItem().getRegistryName().toString();
+
+        webServer.countObjectBroken(playerName, itemName);
     }
 }
