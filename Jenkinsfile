@@ -7,7 +7,7 @@ pipeline {
     }
 
     options {
-        timestamps
+        timestamps()
     }
 
     stages {
