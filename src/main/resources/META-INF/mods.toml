@@ -1,15 +1,25 @@
 modLoader="javafml"
-loaderVersion="[25,)"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/LRRCommunity/boston/issues"
+
 [[mods]]
 modId="boston"
 version="${file.jarVersion}"
 displayName="Boston"
 description='''
-Adds a tracking webpage to a forge server at 0.0.0.0:9292.
+Adds a tracking webpage to a Forge server at 0.0.0.0:9292.
 '''
+
 [[dependencies.boston]]
     modId="forge"
     mandatory=true
-    versionRange="[25,)"
+    versionRange="[28,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.boston]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
     ordering="NONE"
     side="BOTH"
