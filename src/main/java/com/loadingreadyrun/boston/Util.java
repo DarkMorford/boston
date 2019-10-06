@@ -1,8 +1,8 @@
 package com.loadingreadyrun.boston;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.IBlockReader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class Util {
      * @param chunk
      * @return
      */
-    public static Map<String, Integer> compositionOf(IChunk chunk) {
+    public static Map<String, Integer> compositionOf(IBlockReader chunk) {
         HashMap<String, Integer> comp = new HashMap<>();
 
         int blocks = 0;
@@ -23,7 +23,7 @@ public class Util {
             for(int blockY = 0; blockY < 256; blockY++) {
                 for(int blockZ = 0; blockZ < 16; blockZ++) {
                     BlockPos pos = new BlockPos(blockX, blockY, blockZ);
-                    IBlockState block = chunk.getBlockState(pos);
+                    BlockState block = chunk.getBlockState(pos);
 
                     String blockName = block.getBlock().asItem().getRegistryName().toString();
 
