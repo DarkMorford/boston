@@ -3,12 +3,12 @@ package com.loadingreadyrun.boston;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -83,7 +83,7 @@ public class BostonMod {
         if(webServer == null)
             return;
 
-        String playerName = event.getEntityPlayer().getName().getString();
+        String playerName = event.getPlayer().getName().getString();
         String itemName = event.getOriginal().getItem().getRegistryName().toString();
 
         webServer.countObjectBroken(playerName, itemName);
