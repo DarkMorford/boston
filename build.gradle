@@ -2,13 +2,14 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        mavenCentral()
     }
     dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'com.github.johnrengelman.shadow'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -17,7 +18,9 @@ version = '1.6'
 group = 'com.loadingreadyrun.boston' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'boston'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+// Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -25,7 +28,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
+    mappings channel: 'snapshot', version: '20200214-1.15.1'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -85,27 +88,17 @@ minecraft {
     }
 }
 
-configurations {
-    embed
-    compile.extendsFrom(embed)
+repositories {
+    jcenter()
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.0'
-    embed 'org.nanohttpd:nanohttpd:2.3.1'
-    embed group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
-    embed group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    shadow 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+    shadow 'org.nanohttpd:nanohttpd:2.3.1'
 }
 
 jar {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-    }
-
-    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
-
     manifest {
         attributes([
             "Specification-Title": "boston",
@@ -113,20 +106,32 @@ jar {
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Vendor" :"lrr",
-            "Implementation-Version": "${version}",
+            "Implementation-Version": archiveVersion.getOrElse("DEV"),
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+}
+
+shadowJar {
+    archiveClassifier.set("shaded")
+    configurations = [
+        project.configurations.shadow
+    ]
+}
+
+reobf.create("shadowJar") {
+    dependsOn createMcpToSrg
+    setMappings createMcpToSrg.getOutput()
 }
 
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task
 // and then declare that to be published
 // Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfFile = file("$buildDir/reobfShadowJar/output.jar")
 def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
-    builtBy 'reobfJar'
+    builtBy 'reobfShadowJar'
 }
 publishing {
     publications {
