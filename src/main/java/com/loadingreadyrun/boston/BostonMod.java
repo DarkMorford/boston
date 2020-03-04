@@ -8,7 +8,9 @@ import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,11 +21,20 @@ import java.io.IOException;
 public class BostonMod {
     public static final String MOD_ID = "boston";
     private static final Logger LOGGER = LogManager.getLogger();
-
+    private static BostonMod INSTANCE;
     private WebServer webServer;
 
     public BostonMod() {
+        if (INSTANCE != null) throw new RuntimeException("Tried to create more than one BostonMod instance");
+        else INSTANCE = this;
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Configuration.getServerConfigSpec());
+
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public static BostonMod getInstance() {
+        return INSTANCE;
     }
 
     @SubscribeEvent
@@ -42,7 +53,7 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
-        if(webServer == null)
+        if (webServer == null)
             return;
 
         IWorld world = event.getWorld();
@@ -58,7 +69,7 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        if(webServer == null)
+        if (webServer == null)
             return;
 
         String playerName = event.getPlayer().getName().getString();
@@ -70,7 +81,7 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if(webServer == null)
+        if (webServer == null)
             return;
 
         String playerName = event.player.getName().getString();
@@ -81,7 +92,7 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onPlayerItemBreak(PlayerDestroyItemEvent event) {
-        if(webServer == null)
+        if (webServer == null)
             return;
 
         String playerName = event.getPlayer().getName().getString();
