@@ -15,8 +15,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-@Mod("boston")
+@Mod(BostonMod.MOD_ID)
 public class BostonMod {
+    public static final String MOD_ID = "boston";
     private static final Logger LOGGER = LogManager.getLogger();
 
     private WebServer webServer;
