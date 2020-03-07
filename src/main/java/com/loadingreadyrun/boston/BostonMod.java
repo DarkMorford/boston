@@ -1,5 +1,6 @@
 package com.loadingreadyrun.boston;
 
+import com.loadingreadyrun.boston.twitch.TwitchClient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.common.MinecraftForge;
@@ -11,7 +12,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,6 +25,7 @@ public class BostonMod {
     public static final String MOD_ID = "boston";
     private static final Logger LOGGER = LogManager.getLogger();
     private static BostonMod INSTANCE;
+    private TwitchClient twitchClient;
     private WebServer webServer;
 
     public BostonMod() {
@@ -41,14 +45,34 @@ public class BostonMod {
     public void onServerStarting(FMLServerStartingEvent event) {
         LOGGER.info("STARTING stats server on localhost:9292");
 
+        twitchClient = new TwitchClient();
         webServer = new WebServer(event.getServer());
 
+        try {
+            LOGGER.info("Attempting IRC connection");
+            twitchClient.beginConnect();
+        } catch (Throwable e) {
+            LOGGER.error("Caught exception from IRC component: {}", e.getMessage());
+        }
+
+        /*
         try {
             webServer.start();
         } catch (IOException e) {
             LOGGER.error(e);
             System.exit(99);
         }
+        */
+    }
+
+    @SubscribeEvent
+    public void onServerReady(FMLServerStartedEvent event) {
+    }
+
+    @SubscribeEvent
+    public void onServerClosing(FMLServerStoppingEvent event) {
+        LOGGER.info("Shutting down IRC");
+        twitchClient.disconnect();
     }
 
     @SubscribeEvent

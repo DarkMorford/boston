@@ -22,9 +22,9 @@ public final class TwitchConfig {
     private String loginToken;
     private List<String> operators;
 
-    public TwitchConfig(UnmodifiableCommentedConfig configData) {
+    public TwitchConfig(final UnmodifiableCommentedConfig configData) {
         UnmodifiableConfig cfg = configData.get(SECTION);
-        botName = ((String) cfg.get("botName")).trim().toLowerCase();
+        botName = ((String) cfg.get("botName")).trim();
         channelName = ((String) cfg.get("channelName")).trim().toLowerCase();
         chatServer = ((String) cfg.get("serverAddress")).trim();
         commandPrefix = ((String) cfg.get("commandPrefix")).trim();
@@ -32,7 +32,7 @@ public final class TwitchConfig {
         operators = sanitizeOperatorList(cfg.get("operators"));
     }
 
-    public static void setupConfigSpec(Builder builder) {
+    public static void setupConfigSpec(final Builder builder) {
         builder.comment("Twitch.tv chat integration").push(SECTION);
 
         builder.worldRestart()
@@ -67,7 +67,7 @@ public final class TwitchConfig {
         builder.pop();
     }
 
-    private static List<String> sanitizeOperatorList(List<String> operators) {
+    private static List<String> sanitizeOperatorList(final List<String> operators) {
         return operators.stream()
             .map(s -> s.trim().toLowerCase())
             .collect(Collectors.toList());
@@ -89,7 +89,7 @@ public final class TwitchConfig {
         return commandPrefix;
     }
 
-    public void setCommandPrefix(String commandPrefix) {
+    public void setCommandPrefix(final String commandPrefix) {
         this.commandPrefix = commandPrefix.trim();
     }
 
