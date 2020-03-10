@@ -45,12 +45,12 @@ public class BostonMod {
     public void onServerStarting(FMLServerStartingEvent event) {
         LOGGER.info("STARTING stats server on localhost:9292");
 
-        twitchClient = new TwitchClient();
-        webServer = new WebServer(event.getServer());
+        twitchClient = new TwitchClient(event.getServer());
+        // webServer = new WebServer(event.getServer());
 
         try {
             LOGGER.info("Attempting IRC connection");
-            twitchClient.beginConnect();
+            // twitchClient.beginConnect();
         } catch (Throwable e) {
             LOGGER.error("Caught exception from IRC component: {}", e.getMessage());
         }
@@ -67,6 +67,7 @@ public class BostonMod {
 
     @SubscribeEvent
     public void onServerReady(FMLServerStartedEvent event) {
+        twitchClient.joinChatRoom();
     }
 
     @SubscribeEvent

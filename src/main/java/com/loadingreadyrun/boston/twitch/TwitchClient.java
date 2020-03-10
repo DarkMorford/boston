@@ -2,6 +2,7 @@ package com.loadingreadyrun.boston.twitch;
 
 import com.loadingreadyrun.boston.Configuration;
 import com.loadingreadyrun.boston.config.TwitchConfig;
+import net.minecraft.server.MinecraftServer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,16 +16,19 @@ public class TwitchClient {
     private static final Logger LOGGER = LogManager.getLogger();
     private Client chatClient;
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
+    private final MinecraftServer server;
 
     private ConnectHandler connectHandler;
+    private MinecraftHandler minecraftHandler;
 
-    public TwitchClient() {
+    public TwitchClient(MinecraftServer minecraftServer) {
+        server = minecraftServer;
         final TwitchConfig config = Configuration.TWITCH;
 
-        if (StringUtils.isNotBlank(config.getBotName())
-          || StringUtils.isNotBlank(config.getChannelName())
-          || StringUtils.isNotBlank(config.getLoginToken())
-          || StringUtils.isNotBlank(config.getChatServer())) {
+        if (StringUtils.isBlank(config.getBotName())
+          || StringUtils.isBlank(config.getChannelName())
+          || StringUtils.isBlank(config.getLoginToken())
+          || StringUtils.isBlank(config.getChatServer())) {
             status = ConnectionStatus.MISSING_CREDS;
             chatClient = null;
             return;
@@ -41,7 +45,10 @@ public class TwitchClient {
         TwitchSupport.addSupport(chatClient);
 
         connectHandler = new ConnectHandler(this);
+        minecraftHandler = new MinecraftHandler(this, minecraftServer);
+
         chatClient.getEventManager().registerEventListener(connectHandler);
+        chatClient.getEventManager().registerEventListener(minecraftHandler);
         chatClient.setInputListener(LOGGER::info);
         chatClient.setOutputListener(LOGGER::info);
     }
@@ -63,6 +70,7 @@ public class TwitchClient {
     public void joinChatRoom() {
         if (chatClient != null) {
             String chatChannel = StringUtils.prependIfMissing(Configuration.TWITCH.getChannelName(), "#");
+            chatClient.addChannel(chatChannel);
         }
     }
 
