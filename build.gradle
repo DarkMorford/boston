@@ -28,7 +28,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20200214-1.15.1'
+    mappings channel: 'snapshot', version: '20200225-1.15.1'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -96,6 +96,10 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.0'
     shadow 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
     shadow 'org.nanohttpd:nanohttpd:2.3.1'
+    shadow 'io.undertow:undertow-core:2.0.29.Final'
+    shadow 'io.undertow:undertow-servlet:2.0.29.Final'
+    shadow 'io.undertow:undertow-websockets-jsr:2.0.29.Final'
+    shadow 'org.jboss.xnio:xnio-nio:3.6.9.Final'
 }
 
 jar {

@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class HttpConfig {
+public final class HttpConfig {
     public static final String SECTION = "http";
     private static final Logger LOGGER = LogManager.getLogger();
     private String listenAddress;
