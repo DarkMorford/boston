@@ -85,7 +85,7 @@ public class BostonMod {
             return;
 
         String playerName = event.player.getName().getString();
-        BlockPos pos = event.player.getPosition();
+        BlockPos pos = event.player.func_233580_cy_();
 
         webServer.setPlayerPosition(playerName, pos);
     }

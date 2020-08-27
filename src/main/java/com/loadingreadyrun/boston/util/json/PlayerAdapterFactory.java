@@ -45,7 +45,7 @@ public class PlayerAdapterFactory implements TypeAdapterFactory {
             out.name("uuid");
             uuidAdapter.write(out, PlayerEntity.getUUID(value.getGameProfile()));
 
-            BlockPos playerPosition = value.getPosition();
+            BlockPos playerPosition = value.func_233580_cy_();
 
             out.name("position");
             blockPosAdapter.write(out, playerPosition);

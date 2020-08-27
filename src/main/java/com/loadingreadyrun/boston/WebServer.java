@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.iki.elonen.NanoHTTPD;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.DimensionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +39,7 @@ public class WebServer extends NanoHTTPD {
 
             if (chunkX != null) {
 
-                IChunk chunk = minecraftServer.getWorld(DimensionType.OVERWORLD).getChunk(
+                IChunk chunk = minecraftServer.getWorld(World.field_234918_g_).getChunk(
                         Integer.valueOf(chunkX.get(0)),
                         Integer.valueOf(chunkZ.get(0))
                 );
