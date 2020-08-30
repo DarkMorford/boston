@@ -18,7 +18,7 @@ public class OnlinePlayersHandler implements HttpHandler {
     }
 
     @Override
-    public void handleRequest(HttpServerExchange exchange) throws Exception {
+    public void handleRequest(HttpServerExchange exchange) {
         final MinecraftServer mc = exchange.getAttachment(MinecraftMiddleware.GAME_SERVER);
 
         List<ServerPlayerEntity> allPlayers = mc.getPlayerList().getPlayers();

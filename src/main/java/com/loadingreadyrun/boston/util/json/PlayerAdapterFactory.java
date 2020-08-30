@@ -41,17 +41,19 @@ public class PlayerAdapterFactory implements TypeAdapterFactory {
 
             out.name("name").value(value.getName().getString());
             out.name("displayName").value(value.getDisplayName().getString());
+            out.name("playerDetails").value(String.format("/api/players/%s", value.getName().getString()));
 
             out.name("uuid");
             uuidAdapter.write(out, PlayerEntity.getUUID(value.getGameProfile()));
 
-            BlockPos playerPosition = value.func_233580_cy_();
-
             out.name("position");
+            BlockPos playerPosition = value.func_233580_cy_();
             blockPosAdapter.write(out, playerPosition);
 
             out.name("chunk");
-            chunkPosAdapter.write(out, new ChunkPos(playerPosition));
+            ChunkPos playerChunk = new ChunkPos(playerPosition);
+            chunkPosAdapter.write(out, playerChunk);
+            out.name("chunkDetails").value(String.format("/api/chunks/?x=%d&z=%d", playerChunk.x, playerChunk.z));
 
             out.endObject();
         }

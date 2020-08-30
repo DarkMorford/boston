@@ -1,5 +1,6 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[33,)"
+license="All rights reserved"
 issueTrackerURL="https://github.com/LRRCommunity/boston/issues"
 
 [[mods]]
@@ -8,19 +9,19 @@ version="${file.jarVersion}"
 displayName="Punch-A-Chunk"
 displayURL="https://github.com/LRRCommunity/boston"
 description='''
-Adds a tracking webpage to a Forge server at 0.0.0.0:9292.
+Adds telemetry reporting to a Forge server.
 '''
 
 [[dependencies.boston]]
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[33,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.boston]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.2]"
     ordering="NONE"
     side="BOTH"

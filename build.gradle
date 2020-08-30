@@ -9,7 +9,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.github.johnrengelman.shadow'
+// apply plugin: 'com.github.johnrengelman.shadow'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -95,12 +95,13 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.2-33.0.22'
-    shadow 'io.undertow:undertow-core:2.0.29.Final'
-    shadow 'io.undertow:undertow-servlet:2.0.29.Final'
-    shadow 'io.undertow:undertow-websockets-jsr:2.0.29.Final'
-    shadow 'org.jboss.xnio:xnio-nio:3.6.9.Final'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
-    implementation 'org.nanohttpd:nanohttpd:2.3.1'
+    implementation 'io.undertow:undertow-core:2.1.3.Final'
+    compileOnly 'com.google.code.gson:gson:2.8.0'
+    // shadow 'io.undertow:undertow-servlet:2.0.29.Final'
+    // shadow 'io.undertow:undertow-websockets-jsr:2.0.29.Final'
+    // implementation 'org.jboss.xnio:xnio-nio:3.8.1.Final'
+    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.6'
+    // implementation 'org.nanohttpd:nanohttpd:2.3.1'
 }
 
 jar {
@@ -117,6 +118,7 @@ jar {
     }
 }
 
+/*
 shadowJar {
     archiveClassifier.set("shaded")
     configurations = [
@@ -124,10 +126,11 @@ shadowJar {
     ]
 }
 
-//reobf.create("shadowJar") {
-//    dependsOn createMcpToSrg
-//    setMappings createMcpToSrg.getOutput()
-//}
+reobf.create("shadowJar") {
+    dependsOn createMcpToSrg
+    setMappings createMcpToSrg.getOutput()
+}
+*/
 
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task

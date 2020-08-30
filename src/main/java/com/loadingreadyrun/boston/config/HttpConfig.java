@@ -22,7 +22,7 @@ public final class HttpConfig {
         builder.comment("Control panel web server").push(SECTION);
 
         builder.worldRestart()
-            .comment("IP address to listen for connections on")
+            .comment("IPv4 address to bind listener to")
             .define("httpListenAddress", "0.0.0.0");
 
         builder.worldRestart()

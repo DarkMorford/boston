@@ -1,56 +1,80 @@
 package com.loadingreadyrun.boston;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import com.loadingreadyrun.boston.http.WebServer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
 
 @Mod(BostonMod.MOD_ID)
 public class BostonMod {
     public static final String MOD_ID = "boston";
     private static final Logger LOGGER = LogManager.getLogger();
-    private static BostonMod INSTANCE;
-    private WebServer webServer;
+    private WebServer httpServer = null;
 
     public BostonMod() {
-        if (INSTANCE != null) throw new RuntimeException("Tried to create more than one BostonMod instance");
-        else INSTANCE = this;
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Configuration.getServerConfigSpec());
-
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    public static BostonMod getInstance() {
-        return INSTANCE;
     }
 
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
-        LOGGER.info("STARTING stats server on localhost:9292");
-
-        webServer = new WebServer(event.getServer());
+        LOGGER.trace("Entered onServerStarting");
 
         try {
-            webServer.start();
-        } catch (IOException e) {
-            LOGGER.error(e);
-            System.exit(99);
+            LOGGER.debug("Creating HTTP server in stopped state");
+            httpServer = new WebServer();
+            LOGGER.info("HTTP server created successfully");
+        } catch (Exception e) {
+            LOGGER.error("Problem creating HTTP server", e);
+            throw e;
         }
+
+        LOGGER.trace("Exiting onServerStarting");
     }
 
+    @SubscribeEvent
+    public void onServerStarted(FMLServerStartedEvent event) {
+        LOGGER.trace("Entered onServerStarted");
+
+        try {
+            LOGGER.trace("Getting Minecraft server from event");
+            MinecraftServer mcServer = event.getServer();
+            LOGGER.debug("Starting HTTP server");
+            httpServer.start(mcServer);
+            LOGGER.info("HTTP server started on {}:{}", httpServer.getListenAddress(), httpServer.getListenPort());
+        } catch (Exception e) {
+            LOGGER.error("Problem starting HTTP server", e);
+            throw e;
+        }
+
+        LOGGER.trace("Exiting onServerStarted");
+    }
+
+    @SubscribeEvent
+    public void onServerStopping(FMLServerStoppingEvent event) {
+        LOGGER.trace("Entered onServerStopping");
+
+        try {
+            LOGGER.debug("Stopping HTTP server");
+            httpServer.stop();
+            LOGGER.info("HTTP server stopped");
+        } catch (Exception e) {
+            LOGGER.error("Problem stopping HTTP server", e);
+            throw e;
+        }
+
+        LOGGER.trace("Exiting onServerStopping");
+    }
+
+/*
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         if (webServer == null)
@@ -100,4 +124,5 @@ public class BostonMod {
 
         webServer.countObjectBroken(playerName, itemName);
     }
+*/
 }
