@@ -36,18 +36,18 @@ public class PlayerAdapterFactory implements TypeAdapterFactory {
         }
 
         @Override
-        public void write(JsonWriter out, PlayerEntity value) throws IOException {
+        public void write(JsonWriter out, PlayerEntity player) throws IOException {
             out.beginObject();
 
-            out.name("name").value(value.getName().getString());
-            out.name("displayName").value(value.getDisplayName().getString());
-            out.name("playerDetails").value(String.format("/api/players/%s", value.getName().getString()));
+            out.name("name").value(player.getName().getString());
+            out.name("displayName").value(player.getDisplayName().getString());
+            out.name("playerDetails").value(String.format("/api/players/%s", player.getName().getString()));
 
             out.name("uuid");
-            uuidAdapter.write(out, PlayerEntity.getUUID(value.getGameProfile()));
+            uuidAdapter.write(out, player.getUniqueID());
 
             out.name("position");
-            BlockPos playerPosition = value.func_233580_cy_();
+            BlockPos playerPosition = player.func_233580_cy_();
             blockPosAdapter.write(out, playerPosition);
 
             out.name("chunk");

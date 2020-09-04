@@ -16,40 +16,38 @@ import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.InetSocketAddress;
-
 public class WebServer {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private MinecraftMiddleware mcMiddleware;
-    private RoutingHandler mainRouter;
-    private Undertow httpServer;
+    private final MinecraftMiddleware mcMiddleware;
+    private final Undertow httpServer;
 
     public WebServer() {
         final Gson gson = buildGson();
         final HttpConfig config = Configuration.HTTP;
 
-        this.mainRouter = new RoutingHandler();
+        LOGGER.debug("Building HTTP handler chain");
+        RoutingHandler mainRouter = new RoutingHandler();
         this.mcMiddleware = new MinecraftMiddleware(mainRouter);
         HttpHandler cacheKiller = new DisableCacheHandler(mcMiddleware);
         HttpHandler errorPages = new SimpleErrorPageHandler(cacheKiller);
 
+        LOGGER.debug("Adding HTTP URL routes");
         mainRouter.get("/api/players", new OnlinePlayersHandler(gson));
         mainRouter.get("/api/players/{name}", new PlayerDetailHandler(gson));
 
+        LOGGER.debug("Finalizing HTTP server creation");
         this.httpServer = Undertow.builder()
             .addHttpListener(config.getListenPort(), config.getListenAddress(), errorPages)
             .build();
     }
 
     public String getListenAddress() {
-        InetSocketAddress address = (InetSocketAddress) this.httpServer.getListenerInfo().get(0).getAddress();
-        return address.getAddress().getHostAddress();
+        return Configuration.HTTP.getListenAddress();
     }
 
     public int getListenPort() {
-        InetSocketAddress address = (InetSocketAddress) this.httpServer.getListenerInfo().get(0).getAddress();
-        return address.getPort();
+        return Configuration.HTTP.getListenPort();
     }
 
     public void start(MinecraftServer server) {
