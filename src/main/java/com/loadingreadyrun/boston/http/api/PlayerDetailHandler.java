@@ -18,6 +18,7 @@ import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerDetailHandler implements HttpHandler {
@@ -57,31 +58,51 @@ public class PlayerDetailHandler implements HttpHandler {
 
         JsonObject killedEntities = new JsonObject();
         for (Stat<EntityType<?>> e : Stats.ENTITY_KILLED) {
-            killedEntities.addProperty(e.getValue().toString(), playerStats.getValue(e));
+            int count = playerStats.getValue(e);
+            if (count != 0) {
+                String entryName = Objects.requireNonNull(e.getValue().getRegistryName()).toString();
+                killedEntities.addProperty(entryName, count);
+            }
         }
         detailInfo.add("entity_killed", killedEntities);
 
         JsonObject killerEntities = new JsonObject();
         for (Stat<EntityType<?>> e : Stats.ENTITY_KILLED_BY) {
-            killerEntities.addProperty(e.getValue().toString(), playerStats.getValue(e));
+            int count = playerStats.getValue(e);
+            if (count != 0) {
+                String entryName = Objects.requireNonNull(e.getValue().getRegistryName()).toString();
+                killerEntities.addProperty(entryName, count);
+            }
         }
         detailInfo.add("entity_killed_by", killerEntities);
 
         JsonObject minedBlocks = new JsonObject();
         for (Stat<Block> b : Stats.BLOCK_MINED) {
-            minedBlocks.addProperty(b.getValue().asItem().toString(), playerStats.getValue(b));
+            int count = playerStats.getValue(b);
+            if (count != 0) {
+                String entryName = Objects.requireNonNull(b.getValue().getRegistryName()).toString();
+                minedBlocks.addProperty(entryName, count);
+            }
         }
         detailInfo.add("block_mined", minedBlocks);
 
         JsonObject craftedItems = new JsonObject();
         for (Stat<Item> i : Stats.ITEM_CRAFTED) {
-            craftedItems.addProperty(i.getValue().toString(), playerStats.getValue(i));
+            int count = playerStats.getValue(i);
+            if (count != 0) {
+                String entryName = Objects.requireNonNull(i.getValue().getRegistryName()).toString();
+                craftedItems.addProperty(entryName, count);
+            }
         }
         detailInfo.add("item_crafted", craftedItems);
 
         JsonObject brokenItems = new JsonObject();
         for (Stat<Item> i : Stats.ITEM_BROKEN) {
-            brokenItems.addProperty(i.getValue().toString(), playerStats.getValue(i));
+            int count = playerStats.getValue(i);
+            if (count != 0) {
+                String entryName = Objects.requireNonNull(i.getValue().getRegistryName()).toString();
+                brokenItems.addProperty(entryName, count);
+            }
         }
         detailInfo.add("item_broken", brokenItems);
 
