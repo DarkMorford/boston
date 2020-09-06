@@ -53,7 +53,7 @@ public class PlayerAdapterFactory implements TypeAdapterFactory {
             out.name("chunk");
             ChunkPos playerChunk = new ChunkPos(playerPosition);
             chunkPosAdapter.write(out, playerChunk);
-            out.name("chunkDetails").value(String.format("/api/chunks/?x=%d&z=%d", playerChunk.x, playerChunk.z));
+            out.name("chunkDetails").value(String.format("/api/chunks?x=%d&z=%d", playerChunk.x, playerChunk.z));
 
             out.endObject();
         }

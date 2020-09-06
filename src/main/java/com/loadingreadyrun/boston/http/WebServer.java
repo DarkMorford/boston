@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loadingreadyrun.boston.Configuration;
 import com.loadingreadyrun.boston.config.HttpConfig;
+import com.loadingreadyrun.boston.http.api.ChunkDetailHandler;
 import com.loadingreadyrun.boston.http.api.OnlinePlayersHandler;
 import com.loadingreadyrun.boston.http.api.PlayerDetailHandler;
 import com.loadingreadyrun.boston.util.json.PlayerAdapterFactory;
@@ -33,6 +34,7 @@ public class WebServer {
         HttpHandler errorPages = new SimpleErrorPageHandler(cacheKiller);
 
         LOGGER.debug("Adding HTTP URL routes");
+        mainRouter.get("/api/chunks", new ChunkDetailHandler(gson));
         mainRouter.get("/api/players", new OnlinePlayersHandler(gson));
         mainRouter.get("/api/players/{name}", new PlayerDetailHandler(gson));
 
