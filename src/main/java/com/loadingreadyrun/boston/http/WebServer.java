@@ -7,6 +7,7 @@ import com.loadingreadyrun.boston.config.HttpConfig;
 import com.loadingreadyrun.boston.http.api.ChunkDetailHandler;
 import com.loadingreadyrun.boston.http.api.OnlinePlayersHandler;
 import com.loadingreadyrun.boston.http.api.PlayerDetailHandler;
+import com.loadingreadyrun.boston.http.api.PlayerStatResetHandler;
 import com.loadingreadyrun.boston.util.json.PlayerAdapterFactory;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
@@ -37,6 +38,7 @@ public class WebServer {
         mainRouter.get("/api/chunks", new ChunkDetailHandler(gson));
         mainRouter.get("/api/players", new OnlinePlayersHandler(gson));
         mainRouter.get("/api/players/{name}", new PlayerDetailHandler(gson));
+        mainRouter.post("/api/players/{name}/reset", new PlayerStatResetHandler(gson));
 
         LOGGER.debug("Finalizing HTTP server creation");
         this.httpServer = Undertow.builder()
