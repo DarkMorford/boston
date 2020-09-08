@@ -93,7 +93,10 @@ public class ChunkDetailHandler implements HttpHandler {
         chunkIdentity.add("position", chunkLocation);
         chunkInfo.add("chunk", chunkIdentity);
 
-        chunkInfo.add("block_qty", gson.getAdapter(SortedMap.class).toJsonTree(getBlockCounts(blockIterator)));
+        SortedMap<String, Integer> blockBreakdown = getBlockCounts(blockIterator);
+        int totalBlocks = blockBreakdown.values().stream().mapToInt(Integer::intValue).sum();
+        chunkInfo.addProperty("total_blocks", totalBlocks);
+        chunkInfo.add("block_qty", gson.getAdapter(SortedMap.class).toJsonTree(blockBreakdown));
 
         exchange.getResponseHeaders().add(new HttpString("Content-Type"), "application/json");
         exchange.getResponseSender().send(gson.toJson(chunkInfo));
