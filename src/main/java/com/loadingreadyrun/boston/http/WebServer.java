@@ -35,11 +35,13 @@ public class WebServer {
         LOGGER.debug("Adding HTTP GET routes");
         mainRouter.get("/api/chunks", new ChunkDetailHandler(gson));
         mainRouter.get("/api/effects", new ListEffectHandler(gson));
+        mainRouter.get("/api/items", new ListItemHandler(gson));
         mainRouter.get("/api/players", new OnlinePlayersHandler(gson));
         mainRouter.get("/api/players/{name}", new PlayerDetailHandler(gson));
 
         LOGGER.debug("Adding HTTP POST routes");
         mainRouter.post("/api/effects", new BlockingHandler(new ApplyEffectHandler(gson)));
+        mainRouter.post("/api/items", new BlockingHandler(new ItemGiftHandler(gson)));
         mainRouter.post("/api/players/{name}/reset", new PlayerStatResetHandler(gson));
 
         LOGGER.debug("Finalizing HTTP server creation");

@@ -1,0 +1,60 @@
+Connecting & Authentication
+===========================
+The embedded server runs HTTP (note: not HTTPS) on port 38911.
+All requests must include `auth=nifty` as a query parameter. Failure to do so will result in a 401 error.
+
+Player information
+==================
+GET endpoint `/api/players` lists all players currently on the server with position information.
+(Due to differences between the dev/test environment and a release build, the players' XYZ
+coordinates and chunk XZ coordinates are given field_* names in the JSON output. The numbers
+are correct, however. I'll fix that for the next time we use this.)
+
+GET endpoint `/api/players/<player>` provides details on a given player, including entities
+killed/killed by, blocks mined, and items crafted/broken. (Same thing about the XYZ values.)
+
+POST endpoint `/api/players/<player>/reset` resets all statistics for that player to 0.
+
+
+Chunk information
+=================
+GET endpoint `/api/chunks?x=<xPos>&z=<zPos>` provides a breakdown of all non-air blocks
+in a chunk, as well as a total count of non-air blocks.
+
+
+Status effects
+==============
+GET endpoint `/api/effects` provides a link to the list of status effects on the
+Minecraft wiki. For convenience, that URL is https://minecraft.gamepedia.com/Status_effect#Effect_IDs.
+
+POST endpoint `/api/effects` applies a status effect to a player for a given duration. An example of
+a request body follows:
+
+{
+	"playerName": "JamesLRR",
+	"effect": "haste",
+	"level": 1,
+	"duration": 30
+}
+
+The "duration" parameter is provided in seconds. The "level" parameter is 0-based (e.g., level 1 produces a
+"Haste II" effect in game), and defaults to 0 if omitted. There is no theoretical limit on effect levels,
+but each type of effect does have a practical limit which varies by effect.
+
+
+Items
+=====
+GET endpoint `/api/items` provides a link to the list of in-game items. For
+convenience, the link is https://minecraft.gamepedia.com/Java_Edition_data_value#Items.
+
+POST endpoint `/api/items` gives items to a specific player. Example:
+
+{
+	"playerName": "SergeYager",
+	"item": "emerald",
+	"count": 2
+}
+
+Unlike effects, the "count" parameter does not have a default and must be specified. If the player's
+inventory is too full to accept the items, they will instead be dropped at the player's feet. (Giving
+items in flight or over water/lava, maybe not a great idea because of this.)

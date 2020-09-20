@@ -53,7 +53,7 @@ public class PlayerDetailHandler implements HttpHandler {
         playerIdentity.add("position", gson.getAdapter(BlockPos.class).toJsonTree(player.func_233580_cy_()));
         playerIdentity.addProperty("death_count", playerStats.getValue(Stats.CUSTOM.get(Stats.DEATHS)));
         Stat<?> fallStat = Stats.CUSTOM.get(Stats.FALL_ONE_CM);
-        playerIdentity.addProperty("fall_distance", fallStat.format(playerStats.getValue(fallStat)));
+        // playerIdentity.addProperty("fall_distance", fallStat.format(playerStats.getValue(fallStat)));
         detailInfo.add("player", playerIdentity);
 
         JsonObject killedEntities = new JsonObject();

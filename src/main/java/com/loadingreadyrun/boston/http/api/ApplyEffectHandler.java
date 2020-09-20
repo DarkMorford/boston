@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ApplyEffectHandler implements HttpHandler {
-    private Gson gson;
+    private final Gson gson;
 
     public static final Map<String, Integer> EFFECTS;
 

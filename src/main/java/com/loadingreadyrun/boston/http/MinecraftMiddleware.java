@@ -4,6 +4,7 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.ResponseCodeHandler;
 import io.undertow.util.AttachmentKey;
+import io.undertow.util.StatusCodes;
 import net.minecraft.server.MinecraftServer;
 
 public class MinecraftMiddleware implements HttpHandler {
@@ -28,6 +29,12 @@ public class MinecraftMiddleware implements HttpHandler {
     public void handleRequest(HttpServerExchange exchange) throws Exception {
         if (gameServer == null) {
             ResponseCodeHandler.HANDLE_403.handleRequest(exchange);
+            return;
+        }
+
+        boolean hasAuth = exchange.getQueryParameters().containsKey("auth");
+        if (!(hasAuth && exchange.getQueryParameters().get("auth").peekFirst().equalsIgnoreCase("nifty"))) {
+            exchange.setStatusCode(StatusCodes.UNAUTHORIZED);
             return;
         }
 
