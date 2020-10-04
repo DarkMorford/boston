@@ -40,6 +40,7 @@ public class WebServer {
         mainRouter.get("/api/players/{name}", new PlayerDetailHandler(gson));
 
         LOGGER.debug("Adding HTTP POST routes");
+        mainRouter.post("/api/command", new BlockingHandler(new CommandStringHandler(gson)));
         mainRouter.post("/api/effects", new BlockingHandler(new ApplyEffectHandler(gson)));
         mainRouter.post("/api/items", new BlockingHandler(new ItemGiftHandler(gson)));
         mainRouter.post("/api/players/{name}/reset", new PlayerStatResetHandler(gson));
